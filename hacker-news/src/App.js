@@ -1,13 +1,16 @@
 import "./App.css";
-import "antd/dist/antd.css";
+import { ChakraProvider } from '@chakra-ui/react'
 
-import NewsList from "./components/NewsList";
+
+import NewsList from "./components/NewsList/NewsList";
 
 function App() {
   return (
+    <ChakraProvider>
     <div className="App">
       <NewsList />
     </div>
+    </ChakraProvider>
   );
 }
 
