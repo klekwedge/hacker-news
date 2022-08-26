@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { List, ListItem } from '@chakra-ui/react'
+import { Box, List, ListItem, Heading } from '@chakra-ui/react'
 import { fetchNews, fetchSingleNew } from '../../slices/newsSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/app.hook'
 
@@ -29,21 +29,37 @@ function NewsList() {
   console.log(newsList)
 
   return (
-    <h1>
+    <Box maxW='1200px' m='0 auto' p='20px'>
       {newsList.length > 0 ? (
         <List display='flex' flexDirection='column' gap='20px'>
-          {newsList.map((newsItem) => (
-            <ListItem key={newsItem.id}>
-              <h2>{newsItem.title}</h2>
-              <h2>{newsItem.by}</h2>
-              <h2>{newsItem.score}</h2>
-              <h2>{newsItem.type}</h2>
-              <h2>{newsItem.url}</h2>
+          {newsList.map((newsItem, index) => (
+            <ListItem
+              key={newsItem.id}
+              background='blue.500'
+              color='white'
+              p='20px'
+              borderRadius='10px'
+              transition='all 0.5s ease'
+              _hover={{ transform: 'scale(1.02)' }}
+            >
+              <Heading as='h2' fontWeight='700' fontSize='24px' mb='10px'>
+                <span>{`${index + 1}. `}</span>
+                <a href={newsItem.url}>{newsItem.title}</a>
+              </Heading>
+              <Heading as='h3' fontWeight='400' fontSize='16px' mb='2px'>
+                Author: {newsItem.by}
+              </Heading>
+              <Heading as='h3' fontWeight='400' fontSize='16px' mb='2px'>
+                Score: {newsItem.score}
+              </Heading>
+              <Heading as='h3' fontWeight='400' fontSize='16px' mb='2px'>{`Time: ${new Date(
+                newsItem.time * 1000,
+              ).toLocaleString()}`}</Heading>
             </ListItem>
           ))}
         </List>
       ) : null}
-    </h1>
+    </Box>
   )
 }
 
