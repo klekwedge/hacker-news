@@ -1,7 +1,8 @@
 export type NewsListState = {
   newsRefs: string[],
   newsList: INew[],
-  newsListLoadingStatus: string
+  newsListLoadingStatus: string,
+  currentNews: null | INew
 };
 
 export interface INew {

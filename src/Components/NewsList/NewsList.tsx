@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Box, List, ListItem, Heading } from '@chakra-ui/react'
-import { fetchNews, fetchSingleNew } from '../../slices/newsSlice'
+import { v4 as uuidv4 } from 'uuid'
+import { fetchNews, fetchSingleNew, setCurrentNews } from '../../slices/newsSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/app.hook'
+import { INew } from '../../slices/newsSlice.types'
 
 function NewsList() {
   const dispatch = useAppDispatch()
@@ -26,7 +29,9 @@ function NewsList() {
     }
   }, [newsRefs])
 
-  console.log(newsList)
+  function test(newsItem: INew) {
+    dispatch(setCurrentNews(newsItem))
+  }
 
   return (
     <Box maxW='1200px' m='0 auto' p='20px'>
@@ -34,7 +39,7 @@ function NewsList() {
         <List display='flex' flexDirection='column' gap='20px'>
           {newsList.map((newsItem, index) => (
             <ListItem
-              key={newsItem.id}
+              key={uuidv4()}
               background='blue.500'
               color='white'
               p='20px'
@@ -43,8 +48,9 @@ function NewsList() {
               _hover={{ transform: 'scale(1.02)' }}
             >
               <Heading as='h2' fontWeight='700' fontSize='24px' mb='10px'>
-                <span>{`${index + 1}. `}</span>
-                <a href={newsItem.url}>{newsItem.title}</a>
+                <Link to={`/${newsItem.id}`} onClick={() => test(newsItem)}>
+                  <span>{`${index + 1}. ${newsItem.title}`}</span>
+                </Link>
               </Heading>
               <Heading as='h3' fontWeight='400' fontSize='16px' mb='2px'>
                 Author: {newsItem.by}

@@ -7,6 +7,7 @@ const initialState: NewsListState = {
   newsRefs: [],
   newsList: [],
   newsListLoadingStatus: 'not loading',
+  currentNews: null
 };
 
 export const fetchNews = createAsyncThunk('news/fetchNews', (url: string) => {
@@ -19,11 +20,19 @@ export const fetchSingleNew = createAsyncThunk('news/fetchSingleNew', (url: stri
   return request(url);
 });
 
+export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
+  const { request } = useHttp();
+  return request(url);
+});
+
 
 const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
+    setCurrentNews: (state, action) => {
+      state.currentNews = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -47,10 +56,20 @@ const newsSlice = createSlice({
       .addCase(fetchSingleNew.rejected, (state) => {
         // state.newsListLoadingStatus = 'error';
       })
+      .addCase(fetchNew.pending, (state) => {
+        // state.newsListLoadingStatus = 'loading';
+      })
+      .addCase(fetchNew.fulfilled, (state, action: PayloadAction<INew>) => {
+        // state.newsListLoadingStatus = 'not loading';
+        state.currentNews = action.payload;
+      })
+      .addCase(fetchNew.rejected, (state) => {
+        // state.newsListLoadingStatus = 'error';
+      })
       .addDefaultCase(() => { });
   },
 });
 
 const { actions, reducer } = newsSlice;
-
+export const { setCurrentNews } = actions;
 export default reducer;
