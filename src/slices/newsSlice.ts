@@ -36,8 +36,11 @@ const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
-    setCurrentNews: (state, action) => {
-      state.currentNews = action.payload;
+    resetComments: (state) => {
+      state.comments = [];
+    },
+    resetNews: (state) => {
+      state.currentNews = null;
     },
   },
   extraReducers: (builder) => {
@@ -87,5 +90,5 @@ const newsSlice = createSlice({
 });
 
 const { actions, reducer } = newsSlice;
-export const { setCurrentNews } = actions;
+export const { resetComments } = actions;
 export default reducer;

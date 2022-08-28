@@ -2,24 +2,25 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Box, List, ListItem, Heading } from '@chakra-ui/react'
 import { v4 as uuidv4 } from 'uuid'
-import { fetchNews, fetchSingleNew, setCurrentNews } from '../../slices/newsSlice'
+import { fetchNews, fetchSingleNew } from '../../slices/newsSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/app.hook'
-import { INew } from '../../slices/newsSlice.types'
 
 function NewsList() {
   const dispatch = useAppDispatch()
   const { newsList, newsRefs } = useAppSelector((state) => state.news)
 
   useEffect(() => {
-    dispatch(
-      fetchNews(
-        'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty &orderBy="$key"&limitToFirst=100',
-      ),
-    )
+    if (newsList.length === 0) {
+      dispatch(
+        fetchNews(
+          'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty &orderBy="$key"&limitToFirst=100',
+        ),
+      )
+    }
   }, [])
 
   useEffect(() => {
-    if (newsRefs.length > 0) {
+    if (newsRefs.length > 0 && newsList.length < 100) {
       // eslint-disable-next-line array-callback-return
       newsRefs.map((newsId) => {
         dispatch(
@@ -28,10 +29,6 @@ function NewsList() {
       })
     }
   }, [newsRefs])
-
-  function test(newsItem: INew) {
-    dispatch(setCurrentNews(newsItem))
-  }
 
   return (
     <Box maxW='1200px' m='0 auto' p='20px'>
@@ -48,7 +45,7 @@ function NewsList() {
               _hover={{ transform: 'scale(1.02)' }}
             >
               <Heading as='h2' fontWeight='700' fontSize='24px' mb='10px'>
-                <Link to={`/${newsItem.id}`} onClick={() => test(newsItem)}>
+                <Link to={`/${newsItem.id}`}>
                   <span>{`${index + 1}. ${newsItem.title}`}</span>
                 </Link>
               </Heading>
