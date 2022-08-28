@@ -4,10 +4,11 @@ import { Box, List, ListItem, Heading } from '@chakra-ui/react'
 import { v4 as uuidv4 } from 'uuid'
 import { fetchNews, fetchSingleNew } from '../../slices/newsSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/app.hook'
+import Spinner from '../Spinner/Spinner'
 
 function NewsList() {
   const dispatch = useAppDispatch()
-  const { newsList, newsRefs } = useAppSelector((state) => state.news)
+  const { newsList, newsRefs, newsListLoadingStatus } = useAppSelector((state) => state.news)
 
   useEffect(() => {
     if (newsList.length === 0) {
@@ -30,9 +31,17 @@ function NewsList() {
     }
   }, [newsRefs])
 
+  if (newsListLoadingStatus === 'loading') {
+    return (
+      <Box w='100vw' h='100vh'>
+        <Spinner />
+      </Box>
+    )
+  }
+
   return (
     <Box maxW='1200px' m='0 auto' p='20px'>
-      {newsList.length > 0 ? (
+      {newsList.length > 0 && newsListLoadingStatus === 'not loading' ? (
         <List display='flex' flexDirection='column' gap='20px'>
           {newsList.map((newsItem, index) => (
             <ListItem

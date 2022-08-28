@@ -1,7 +1,7 @@
 export type NewsListState = {
   newsRefs: string[],
   newsList: INew[],
-  newsListLoadingStatus: string,
+  newsListLoadingStatus: 'loading' | 'not loading' | 'error',
   currentNews: null | INew,
   comments: IComment[]
 };

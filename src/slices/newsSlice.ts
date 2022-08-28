@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import useHttp from '../hooks/http.hook';
@@ -36,9 +37,13 @@ const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
+    stopLoadingNews: (state) => {
+      state.newsListLoadingStatus = 'not loading'
+    },
     resetComments: (state) => {
       state.comments = [];
     },
+
     resetNews: (state) => {
       state.currentNews = null;
     },
@@ -55,34 +60,39 @@ const newsSlice = createSlice({
       .addCase(fetchNews.rejected, (state) => {
         state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchSingleNew.pending, (state) => {
+      .addCase(fetchSingleNew.pending, () => {
         // state.newsListLoadingStatus = 'loading';
       })
       .addCase(fetchSingleNew.fulfilled, (state, action: PayloadAction<INew>) => {
-        // state.newsListLoadingStatus = 'not loading';
         state.newsList.push(action.payload);
+        if (state.newsList.length === 100) {
+          state.newsListLoadingStatus = 'not loading';
+        }
+        else {
+          state.newsListLoadingStatus = 'loading';
+        }
       })
       .addCase(fetchSingleNew.rejected, (state) => {
-        // state.newsListLoadingStatus = 'error';
+        state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchNew.pending, (state) => {
+      .addCase(fetchNew.pending, () => {
         // state.newsListLoadingStatus = 'loading';
       })
       .addCase(fetchNew.fulfilled, (state, action: PayloadAction<INew>) => {
         // state.newsListLoadingStatus = 'not loading';
         state.currentNews = action.payload;
       })
-      .addCase(fetchNew.rejected, (state) => {
+      .addCase(fetchNew.rejected, () => {
         // state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchComment.pending, (state) => {
+      .addCase(fetchComment.pending, () => {
         // state.newsListLoadingStatus = 'loading';
       })
       .addCase(fetchComment.fulfilled, (state, action: PayloadAction<IComment>) => {
         // state.newsListLoadingStatus = 'not loading';
         state.comments.push(action.payload);
       })
-      .addCase(fetchComment.rejected, (state) => {
+      .addCase(fetchComment.rejected, () => {
         // state.newsListLoadingStatus = 'error';
       })
       .addDefaultCase(() => { });

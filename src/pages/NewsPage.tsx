@@ -27,7 +27,7 @@ function NewsPage() {
     }
   }, [currentNews])
 
-  // console.log(comments)
+  console.log(comments)
 
   // список комментариев в виде дерева
 
