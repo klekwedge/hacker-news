@@ -1,13 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import useHttp from '../hooks/http.hook';
-import { INew, NewsListState } from './newsSlice.types';
+import { IComment, INew, NewsListState } from './newsSlice.types';
 
 const initialState: NewsListState = {
   newsRefs: [],
   newsList: [],
   newsListLoadingStatus: 'not loading',
-  currentNews: null
+  currentNews: null,
+  comments: [],
 };
 
 export const fetchNews = createAsyncThunk('news/fetchNews', (url: string) => {
@@ -21,6 +22,11 @@ export const fetchSingleNew = createAsyncThunk('news/fetchSingleNew', (url: stri
 });
 
 export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
+  const { request } = useHttp();
+  return request(url);
+});
+
+export const fetchComment = createAsyncThunk('news/fetchComment', (url: string) => {
   const { request } = useHttp();
   return request(url);
 });
@@ -64,6 +70,16 @@ const newsSlice = createSlice({
         state.currentNews = action.payload;
       })
       .addCase(fetchNew.rejected, (state) => {
+        // state.newsListLoadingStatus = 'error';
+      })
+      .addCase(fetchComment.pending, (state) => {
+        // state.newsListLoadingStatus = 'loading';
+      })
+      .addCase(fetchComment.fulfilled, (state, action: PayloadAction<IComment>) => {
+        // state.newsListLoadingStatus = 'not loading';
+        state.comments.push(action.payload);
+      })
+      .addCase(fetchComment.rejected, (state) => {
         // state.newsListLoadingStatus = 'error';
       })
       .addDefaultCase(() => { });
