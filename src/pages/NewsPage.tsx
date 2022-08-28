@@ -1,8 +1,10 @@
 /* eslint-disable react/self-closing-comp */
 import React, { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { Avatar, Box, Flex, Heading, Link, List, ListItem } from '@chakra-ui/react'
-import { useParams } from 'react-router-dom'
+import { Avatar, Flex, Box, Heading, Link, List, ListItem } from '@chakra-ui/react'
+import { useParams, Link as RouterLink } from 'react-router-dom'
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
+import { GrUpdate } from 'react-icons/gr'
 import { useAppDispatch, useAppSelector } from '../hooks/app.hook'
 import { fetchComment, fetchNew, resetComments } from '../slices/newsSlice'
 
@@ -32,7 +34,17 @@ function NewsPage() {
   // список комментариев в виде дерева
 
   return (
-    <Box>
+    <Box maxW='1200px' m='0 auto' p='20px' gap='20px'>
+       <Flex
+        gap='20px'
+        alignItems='center'
+        mb='30px'
+      >
+        <RouterLink to='/'>
+          <BsFillArrowLeftSquareFill size='30px' fill='#00B5D8' />
+        </RouterLink>
+        <GrUpdate size='30px' cursor='pointer' />
+      </Flex>
       {currentNews ? (
         <>
           {' '}
