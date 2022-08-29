@@ -10,6 +10,7 @@ const initialState: NewsListState = {
   newsListLoadingStatus: 'not loading',
   currentNews: null,
   comments: [],
+  commentsLoadingStatus: 'not loading'
 };
 
 export const fetchNews = createAsyncThunk('news/fetchNews', (url: string) => {
@@ -43,7 +44,6 @@ const newsSlice = createSlice({
     resetComments: (state) => {
       state.comments = [];
     },
-
     resetNews: (state) => {
       state.currentNews = null;
     },

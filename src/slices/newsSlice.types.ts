@@ -1,10 +1,13 @@
 export type NewsListState = {
   newsRefs: string[],
   newsList: INew[],
-  newsListLoadingStatus: 'loading' | 'not loading' | 'error',
+  newsListLoadingStatus: LoadingStatus
   currentNews: null | INew,
-  comments: IComment[]
+  comments: IComment[],
+  commentsLoadingStatus: LoadingStatus
 };
+
+type LoadingStatus = 'loading' | 'not loading' | 'error';
 
 export interface INew {
   by: string;

@@ -18,6 +18,7 @@ function NewsPage() {
     dispatch(fetchNew(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`))
   }, [newsId])
 
+
   useEffect(() => {
     if (currentNews) {
       // eslint-disable-next-line array-callback-return
@@ -29,17 +30,13 @@ function NewsPage() {
     }
   }, [currentNews])
 
-  console.log(comments)
+  // console.log(comments)
 
   // список комментариев в виде дерева
 
   return (
     <Box maxW='1200px' m='0 auto' p='20px' gap='20px'>
-       <Flex
-        gap='20px'
-        alignItems='center'
-        mb='30px'
-      >
+      <Flex gap='20px' alignItems='center' mb='30px'>
         <RouterLink to='/'>
           <BsFillArrowLeftSquareFill size='30px' fill='#00B5D8' />
         </RouterLink>
