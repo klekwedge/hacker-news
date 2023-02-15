@@ -20,6 +20,10 @@ function NewsList() {
     }
   }, [])
 
+  // console.log(newsRefs);
+  // console.log(newsList);
+
+
   useEffect(() => {
     if (newsRefs.length > 0 && newsList.length < 100) {
       // eslint-disable-next-line array-callback-return

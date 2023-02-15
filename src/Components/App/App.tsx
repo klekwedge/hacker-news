@@ -1,7 +1,6 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Spinner from '../Spinner/Spinner'
-import './App.css'
 
 const MainPage = lazy(() => import('../../pages/MainPage'))
 const NewsPage = lazy(() => import('../../pages/NewsPage'))
