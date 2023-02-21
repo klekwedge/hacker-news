@@ -55,7 +55,7 @@ function NewsList() {
               p='20px'
               borderRadius='10px'
               transition='all 0.5s ease'
-              _hover={{ transform: 'scale(1.02)' }}
+              _hover={{ transform: 'scale(1.01)' }}
             >
               <Heading as='h2' fontWeight='700' fontSize='24px' mb='10px'>
                 <Link to={`/${newsItem.id}`}>

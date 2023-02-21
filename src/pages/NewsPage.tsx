@@ -21,8 +21,7 @@ function NewsPage() {
 
   useEffect(() => {
     if (currentNews) {
-      // eslint-disable-next-line array-callback-return
-      currentNews.kids.map((commentId) => {
+      currentNews.kids.forEach((commentId) => {
         dispatch(
           fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`),
         )
@@ -30,21 +29,30 @@ function NewsPage() {
     }
   }, [currentNews])
 
-  // console.log(comments)
+  console.log(currentNews?.kids)
+  console.log(comments)
 
-  // список комментариев в виде дерева
+  function updateComments() {
+    if (currentNews) {
+      dispatch(resetComments())
+      currentNews.kids.forEach((commentId) => {
+        dispatch(
+          fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`),
+        )
+      })
+    }
+  }
 
   return (
     <Box maxW='1200px' m='0 auto' p='20px' gap='20px'>
       <Flex gap='20px' alignItems='center' mb='30px'>
         <RouterLink to='/'>
-          <BsFillArrowLeftSquareFill size='30px' fill='#00B5D8' />
+          <BsFillArrowLeftSquareFill size='30px' />
         </RouterLink>
-        <GrUpdate size='30px' cursor='pointer' />
+        <GrUpdate size='30px' cursor='pointer' onClick={() => updateComments()} />
       </Flex>
       {currentNews ? (
         <>
-          {' '}
           <Heading as='h1' fontWeight='700' fontSize='24px' mb='10px'>
             {currentNews.title}
           </Heading>
@@ -63,6 +71,7 @@ function NewsPage() {
           <Heading as='h2' fontWeight='400' fontSize='16px' mb='2px'>
             Comments: {comments.length}
           </Heading>
+          {/* список комментариев в виде дерева */}
           <List display='flex' flexDirection='column' gap='30px' p='20px 10px'>
             {comments.map((commentItem) => (
               <ListItem key={uuidv4()} display='flex' gap='30px'>
