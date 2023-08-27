@@ -10,7 +10,6 @@
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
 - [Author](#author)
 
 ## Deployment instructions
@@ -82,8 +81,6 @@ Develop an interface for the [Hacker News](https://news.ycombinator.com/news) we
 - Redux Toolkit
 - SCSS
 - Chakra UI
-
-### What I learned
 
 ## Author
 

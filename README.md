@@ -83,8 +83,6 @@
 - SCSS
 - Chakra UI
 
-### Что я узнал
-
 ## Автор
 
 - [Вебсайт](https://klekwedge-cv.vercel.app/)

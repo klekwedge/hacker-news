@@ -1,5 +1,5 @@
 /* eslint-disable react/self-closing-comp */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Avatar, Flex, Box, Heading, Link, List, ListItem } from '@chakra-ui/react'
 import { useParams, Link as RouterLink } from 'react-router-dom'

@@ -1,4 +1,3 @@
-import React from 'react';
 import NewsList from '../Components/NewsList/NewsList'
 
 function MainPage() {
