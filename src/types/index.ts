@@ -4,7 +4,7 @@ export interface INews {
     by: string;
     descendants: number;
     id: number;
-    kids: number[];
+    kids: number[] | undefined;
     score: number;
     time: number;
     title: string;

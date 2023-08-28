@@ -1,28 +1,27 @@
 /* eslint-disable react/self-closing-comp */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex, Box, Heading, Link, List, Button } from '@chakra-ui/react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
-import { GrUpdate } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { fetchComments, fetchNew, resetComments } from '../slices/newsSlice';
+import { fetchNew } from '../slices/newsSlice';
 import Comment from '../components/Comment/Comment';
 import Spinner from '../components/Spinner/Spinner';
+import { IComment } from '../types';
+import { useAllFetch } from '../hooks/useFetch';
 
 function NewsPage() {
   const { newsId } = useParams();
   const dispatch = useAppDispatch();
-  const { currentNews, comments, currentNewsLoadingStatus, commentsLoadingStatus } = useAppSelector(
-    (state) => state.news,
-  );
+  const [comments, setComments] = useState<IComment[]>([]);
+  const { currentNews, currentNewsLoadingStatus, commentsLoadingStatus } = useAppSelector((state) => state.news);
 
   useEffect(() => {
-    dispatch(resetComments());
     dispatch(fetchNew(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`));
   }, [newsId]);
 
   useEffect(() => {
-    if (currentNews) {
+    if (currentNews && currentNews.kids) {
       const urls = currentNews.kids.map(
         (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
       );
@@ -33,30 +32,31 @@ function NewsPage() {
         fetchPromises.push(fetch(url));
       });
 
-      dispatch(fetchComments(fetchPromises));
+      const { request } = useAllFetch();
+
+      request(fetchPromises).then((data) => setComments(data as IComment[]));
     }
   }, [currentNews]);
 
   function updateComments() {
-    if (currentNews) {
-      dispatch(resetComments());
-      const urls = currentNews.kids.map(
-        (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
-      );
-
-      const fetchPromises: Promise<Response>[] = [];
-
-      urls.forEach((url) => {
-        fetchPromises.push(fetch(url));
-      });
-
-      dispatch(fetchComments(fetchPromises));
-    }
+    // if (currentNews && currentNews.kids) {
+    //   dispatch(resetComments());
+    //   const urls = currentNews.kids.map(
+    //     (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
+    //   );
+    //   const fetchPromises: Promise<Response>[] = [];
+    //   urls.forEach((url) => {
+    //     fetchPromises.push(fetch(url));
+    //   });
+    //   dispatch(fetchComments(fetchPromises));
+    // }
   }
 
-  if (currentNewsLoadingStatus === 'loading' || commentsLoadingStatus === 'loading') {
-    return <Spinner />;
-  }
+  // if (currentNewsLoadingStatus === 'loading' || commentsLoadingStatus === 'loading') {
+  //   return <Spinner />;
+  // }
+
+  console.log(comments);
 
   return (
     <Box maxW="1200px" m="0 auto" p="20px" gap="20px">
@@ -88,7 +88,7 @@ function NewsPage() {
           <Heading as="h2" fontWeight="400" fontSize="16px" mb="2px">
             Comments: {comments.length}
           </Heading>
-          <List display="flex" flexDirection="column" gap="30px" p="20px 10px">
+          <List display="flex" flexDirection="column" gap="50px" p="20px 10px">
             {comments.map((commentItem) => (
               <Comment commentItem={commentItem} key={commentItem.id} />
             ))}

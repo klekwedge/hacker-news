@@ -30,21 +30,12 @@ export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
   return request(url);
 });
 
-export const fetchComments = createAsyncThunk('news/fetchComment', (fetchPromises: Promise<Response>[]) => {
-  const { request } = useAllFetch();
-  return request(fetchPromises);
-});
-
-
 const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
     stopLoadingNews: (state) => {
       state.newsListLoadingStatus = 'idle'
-    },
-    resetComments: (state) => {
-      state.comments = [];
     },
     resetNews: (state) => {
       state.currentNews = null;
@@ -82,19 +73,9 @@ const newsSlice = createSlice({
       .addCase(fetchNew.rejected, (state) => {
         state.currentNewsLoadingStatus = 'error';
       })
-      .addCase(fetchComments.pending, (state) => {
-        state.commentsLoadingStatus = 'loading';
-      })
-      .addCase(fetchComments.fulfilled, (state, action: any) => {
-        state.commentsLoadingStatus = 'idle';
-        state.comments = action.payload;
-      })
-      .addCase(fetchComments.rejected, (state) => {
-        state.commentsLoadingStatus = 'error';
-      })
   },
 });
 
 const { actions, reducer } = newsSlice;
-export const { resetComments } = actions;
+// export const { } = actions;
 export default reducer;
