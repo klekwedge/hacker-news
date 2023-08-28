@@ -8,11 +8,11 @@ import { INews } from '../types';
 const initialState: NewsListState = {
   newsLinks: [],
   newsList: [],
-  newsListLoadingStatus: 'idle',
+  newsListLoadingStatus: 'loading',
   currentNews: null,
-  currentNewsLoadingStatus: 'idle',
+  currentNewsLoadingStatus: 'loading',
   comments: [],
-  commentsLoadingStatus: 'idle',
+  commentsLoadingStatus: 'loading',
 };
 
 export const fetchNewsLinks = createAsyncThunk('news/fetchNewsLinks', (url: string) => {

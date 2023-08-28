@@ -25,9 +25,7 @@ function NewsList() {
 
   useEffect(() => {
     if (newsLinks.length) {
-      const urls = newsLinks.map(
-        (newsId) => `https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`,
-      );
+      const urls = newsLinks.map((newsId) => `https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
 
       const fetchPromises: Promise<Response>[] = [];
       urls.forEach((url) => {
@@ -38,11 +36,7 @@ function NewsList() {
   }, [newsLinks]);
 
   if (newsListLoadingStatus === 'loading') {
-    return (
-      <Box w="100vw" h="100vh">
-        <Spinner />
-      </Box>
-    );
+    return <Spinner />;
   }
 
   return (
