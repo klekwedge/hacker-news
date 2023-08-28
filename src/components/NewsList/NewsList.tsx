@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Flex, Button } from '@chakra-ui/react';
-import { v4 as uuidv4 } from 'uuid';
 import { fetchNews, fetchNewsLinks } from '../../slices/newsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import Spinner from '../Spinner/Spinner';
@@ -62,7 +61,7 @@ function NewsList() {
           {newsList.map((newsItem, index) => (
             <Box
               onClick={() => newOnClick(newsItem.id)}
-              key={uuidv4()}
+              key={newsItem.id}
               background="blue.500"
               color="white"
               p="20px"
