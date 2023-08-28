@@ -56,8 +56,6 @@ function NewsPage() {
   //   return <Spinner />;
   // }
 
-  console.log(comments);
-
   return (
     <Box maxW="1200px" m="0 auto" p="20px" gap="20px">
       <Flex gap="20px" alignItems="center" mb="30px" justifyContent="space-between">
@@ -88,11 +86,11 @@ function NewsPage() {
           <Heading as="h2" fontWeight="400" fontSize="16px" mb="2px">
             Comments: {comments.length}
           </Heading>
-          <List display="flex" flexDirection="column" gap="50px" p="20px 10px">
+          <Flex flexDirection="column" gap="30px" p="20px 10px">
             {comments.map((commentItem) => (
               <Comment commentItem={commentItem} key={commentItem.id} />
             ))}
-          </List>
+          </Flex>
         </>
       ) : null}
     </Box>

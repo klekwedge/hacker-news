@@ -1,9 +1,7 @@
 /* eslint-disable react/self-closing-comp */
 import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { Avatar, Button, Flex, Heading, ListItem } from '@chakra-ui/react';
+import { Avatar, Flex, Heading, Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react';
 import { IComment } from '../../types';
-import { useAppDispatch } from '../../hooks/useRedux';
 import { useAllFetch } from '../../hooks/useFetch';
 
 interface CommentProps {
@@ -12,9 +10,12 @@ interface CommentProps {
 
 function Comment({ commentItem }: CommentProps) {
   const [comments, setComments] = useState<IComment[]>([]);
+  const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
   const getCommentsKids = () => {
-    if (commentItem.kids) {
+    if (commentItem.kids && !comments.length) {
+      setIsCommentsLoading(true);
+
       const urls = commentItem.kids.map(
         (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
       );
@@ -27,12 +28,15 @@ function Comment({ commentItem }: CommentProps) {
 
       const { request } = useAllFetch();
 
-      request(fetchPromises).then((data) => setComments(data as IComment[]));
+      request(fetchPromises).then((data) => {
+        setComments(data as IComment[]);
+        setIsCommentsLoading(false);
+      });
     }
   };
 
   return (
-    <ListItem key={uuidv4()} display="flex" gap="15px">
+    <Flex gap="15px">
       <Avatar name={commentItem.by} />
       <Flex flexDirection="column">
         <Flex gap="20px" alignItems="center" mb="10px">
@@ -51,13 +55,40 @@ function Comment({ commentItem }: CommentProps) {
           dangerouslySetInnerHTML={{ __html: commentItem.text }}
         />
         {commentItem.kids && (
-          <Button maxW="80px" colorScheme="blue" onClick={getCommentsKids} mb='30px'>
-            Else
-          </Button>
+          <Accordion border="transparent" allowToggle>
+            <AccordionItem>
+              {({ isExpanded }) => (
+                <>
+                  <AccordionButton
+                    _expanded={{ bg: 'blue.500', color: 'white' }}
+                    display="inline"
+                    maxW="150px"
+                    background="teal.500"
+                    _hover={{
+                      background: 'teal.600',
+                      color: 'white',
+                    }}
+                    borderRadius="5px"
+                    color="white"
+                    onClick={getCommentsKids}
+                    mb="30px"
+                  >
+                    {isExpanded ? 'Close comments' : 'Open comments'}
+                  </AccordionButton>
+                  <AccordionPanel>
+                    {isCommentsLoading ? (
+                      <h3>Loading...</h3>
+                    ) : (
+                      comments.map((comment) => <Comment commentItem={comment} key={comment.id} />)
+                    )}
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+          </Accordion>
         )}
-        {comments.map((comment) => <Comment commentItem={comment} />)}
       </Flex>
-    </ListItem>
+    </Flex>
   );
 }
 
