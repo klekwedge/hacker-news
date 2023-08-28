@@ -1,7 +1,6 @@
 /* eslint-disable react/self-closing-comp */
 import { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { Avatar, Flex, Box, Heading, Link, List, ListItem, Button } from '@chakra-ui/react';
+import { Flex, Box, Heading, Link, List, Button } from '@chakra-ui/react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 import { GrUpdate } from 'react-icons/gr';
@@ -31,20 +30,24 @@ function NewsPage() {
         fetchPromises.push(fetch(url));
       });
 
-      // dispatch(fetchComments(fetchPromises))
-
-      // currentNews.kids.forEach((commentId) => {
-      //   dispatch(fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`));
-      // });
+      dispatch(fetchComments(fetchPromises));
     }
   }, [currentNews]);
 
   function updateComments() {
     if (currentNews) {
       dispatch(resetComments());
-      currentNews.kids.forEach((commentId) => {
-        dispatch(fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`));
+      const urls = currentNews.kids.map(
+        (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
+      );
+
+      const fetchPromises: Promise<Response>[] = [];
+
+      urls.forEach((url) => {
+        fetchPromises.push(fetch(url));
       });
+
+      dispatch(fetchComments(fetchPromises));
     }
   }
 
@@ -78,7 +81,6 @@ function NewsPage() {
           <Heading as="h2" fontWeight="400" fontSize="16px" mb="2px">
             Comments: {comments.length}
           </Heading>
-          {/* список комментариев в виде дерева */}
           <List display="flex" flexDirection="column" gap="30px" p="20px 10px">
             {comments.map((commentItem) => (
               <Comment commentItem={commentItem} key={commentItem.id} />

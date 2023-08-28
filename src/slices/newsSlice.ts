@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import useHttp from '../hooks/useHttp';
+import { useAllFetch, useFetch } from '../hooks/useFetch';
 import { IComment, INew, NewsListState } from './newsSlice.types';
 
 const initialState: NewsListState = {
@@ -14,42 +14,23 @@ const initialState: NewsListState = {
 };
 
 export const fetchNews = createAsyncThunk('news/fetchNews', (url: string) => {
-  const { request } = useHttp();
+  const { request } = useFetch();
   return request(url);
 });
 
 export const fetchSingleNew = createAsyncThunk('news/fetchSingleNew', (url: string) => {
-  const { request } = useHttp();
+  const { request } = useFetch();
   return request(url);
 });
 
 export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
-  const { request } = useHttp();
+  const { request } = useFetch();
   return request(url);
 });
 
-export const fetchComments = createAsyncThunk('news/fetchComment', (url: string) => {
-  const { request } = useHttp();
-  return request(url);
-
-  // Promise.all(fetchPromises)
-  // .then(responses => {
-  //   // Обрабатываем ответы на запросы здесь
-  //   responses.forEach(response => {
-  //     if (response.ok) {
-  //       // Если запрос успешен (HTTP-код 200), то обрабатываем данные
-  //       response.json().then(data => {
-  //         console.log(data);
-  //       });
-  //     } else {
-  //       // В случае ошибки, обрабатываем её здесь
-  //       console.error('Ошибка при запросе:', response.status);
-  //     }
-  //   });
-  // })
-  // .catch(error => {
-  //   console.error('Произошла ошибка при выполнении запросов:', error);
-  // });
+export const fetchComments = createAsyncThunk('news/fetchComment', (fetchPromises: Promise<Response>[]) => {
+  const { request } = useAllFetch();
+  return request(fetchPromises);
 });
 
 
@@ -109,7 +90,7 @@ const newsSlice = createSlice({
       })
       .addCase(fetchComments.fulfilled, (state, action: PayloadAction<IComment>) => {
         // state.newsListLoadingStatus = 'not loading';
-        state.comments.push(action.payload);
+        state.comments = action.payload;
       })
       .addCase(fetchComments.rejected, () => {
         // state.newsListLoadingStatus = 'error';
