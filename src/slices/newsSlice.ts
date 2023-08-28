@@ -2,15 +2,17 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { useAllFetch, useFetch } from '../hooks/useFetch';
-import { IComment, INew, NewsListState } from './newsSlice.types';
+import { NewsListState } from './newsSlice.types';
+import { INews } from '../types';
 
 const initialState: NewsListState = {
   newsLinks: [],
   newsList: [],
-  newsListLoadingStatus: 'not loading',
+  newsListLoadingStatus: 'idle',
   currentNews: null,
+  currentNewsLoadingStatus: 'idle',
   comments: [],
-  commentsLoadingStatus: 'not loading'
+  commentsLoadingStatus: 'idle',
 };
 
 export const fetchNewsLinks = createAsyncThunk('news/fetchNewsLinks', (url: string) => {
@@ -39,7 +41,7 @@ const newsSlice = createSlice({
   initialState,
   reducers: {
     stopLoadingNews: (state) => {
-      state.newsListLoadingStatus = 'not loading'
+      state.newsListLoadingStatus = 'idle'
     },
     resetComments: (state) => {
       state.comments = [];
@@ -54,7 +56,7 @@ const newsSlice = createSlice({
         state.newsListLoadingStatus = 'loading';
       })
       .addCase(fetchNewsLinks.fulfilled, (state, action) => {
-        state.newsListLoadingStatus = 'not loading';
+        state.newsListLoadingStatus = 'idle';
         state.newsLinks = action.payload;
       })
       .addCase(fetchNewsLinks.rejected, (state) => {
@@ -65,20 +67,20 @@ const newsSlice = createSlice({
       })
       .addCase(fetchNews.fulfilled, (state, action: any) => {
         state.newsList = action.payload
-        state.newsListLoadingStatus = 'not loading';
+        state.newsListLoadingStatus = 'idle';
       })
       .addCase(fetchNews.rejected, (state) => {
         state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchNew.pending, () => {
-        // state.newsListLoadingStatus = 'loading';
+      .addCase(fetchNew.pending, (state) => {
+        state.currentNewsLoadingStatus = 'loading';
       })
-      .addCase(fetchNew.fulfilled, (state, action: PayloadAction<INew>) => {
-        // state.newsListLoadingStatus = 'not loading';
+      .addCase(fetchNew.fulfilled, (state, action: PayloadAction<INews>) => {
+        state.currentNewsLoadingStatus = 'idle';
         state.currentNews = action.payload;
       })
-      .addCase(fetchNew.rejected, () => {
-        // state.newsListLoadingStatus = 'error';
+      .addCase(fetchNew.rejected, (state) => {
+        state.currentNewsLoadingStatus = 'error';
       })
       .addCase(fetchComments.pending, () => {
         // state.newsListLoadingStatus = 'loading';

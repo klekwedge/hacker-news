@@ -11,7 +11,7 @@ import Comment from '../components/Comment/Comment';
 function NewsPage() {
   const { newsId } = useParams();
   const dispatch = useAppDispatch();
-  const { currentNews, comments } = useAppSelector((state) => state.news);
+  const { currentNews, comments, currentNewsLoadingStatus } = useAppSelector((state) => state.news);
 
   useEffect(() => {
     dispatch(resetComments());

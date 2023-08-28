@@ -47,7 +47,7 @@ function NewsList() {
 
   return (
     <Box maxW="1200px" m="0 auto" p="20px">
-      {newsList.length > 0 && newsListLoadingStatus === 'not loading' ? (
+      {newsList.length > 0 && newsListLoadingStatus === 'idle' ? (
         <List display="flex" flexDirection="column" gap="20px">
           {newsList.map((newsItem, index) => (
             <ListItem

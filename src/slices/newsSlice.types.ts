@@ -1,32 +1,11 @@
+import { IComment, INews, LoadingStatus } from "../types";
+
 export type NewsListState = {
   newsLinks: string[],
-  newsList: INew[],
+  newsList: INews[],
   newsListLoadingStatus: LoadingStatus
-  currentNews: null | INew,
+  currentNews: null | INews,
+  currentNewsLoadingStatus: LoadingStatus,
   comments: IComment[],
   commentsLoadingStatus: LoadingStatus
 };
-
-type LoadingStatus = 'loading' | 'not loading' | 'error';
-
-export interface INew {
-  by: string;
-  descendants: number;
-  id: number;
-  kids: number[];
-  score: number;
-  time: number;
-  title: string;
-  type: string;
-  url: string;
-}
-
-export interface IComment {
-  by: string;
-  id: number;
-  kids: number[];
-  parent: number;
-  text: string;
-  time: number;
-  type: string;
-}
