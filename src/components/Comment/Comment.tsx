@@ -9,7 +9,7 @@ interface CommentProps {
 
 function Comment({ commentItem }: CommentProps) {
   return (
-    <ListItem key={uuidv4()} display="flex" gap="30px">
+    <ListItem key={uuidv4()} display="flex" gap="15px">
       <Avatar name={commentItem.by} />
       <Flex flexDirection="column">
         <Flex gap="20px" alignItems="center" mb="10px">

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Box, List, ListItem, Heading } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchNews, fetchSingleNew } from '../../slices/newsSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/app.hook';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import Spinner from '../Spinner/Spinner';
 
 function NewsList() {

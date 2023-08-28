@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import useHttp from '../hooks/http.hook';
+import useHttp from '../hooks/useHttp';
 import { IComment, INew, NewsListState } from './newsSlice.types';
 
 const initialState: NewsListState = {
@@ -28,9 +28,28 @@ export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
   return request(url);
 });
 
-export const fetchComment = createAsyncThunk('news/fetchComment', (url: string) => {
+export const fetchComments = createAsyncThunk('news/fetchComment', (url: string) => {
   const { request } = useHttp();
   return request(url);
+
+  // Promise.all(fetchPromises)
+  // .then(responses => {
+  //   // Обрабатываем ответы на запросы здесь
+  //   responses.forEach(response => {
+  //     if (response.ok) {
+  //       // Если запрос успешен (HTTP-код 200), то обрабатываем данные
+  //       response.json().then(data => {
+  //         console.log(data);
+  //       });
+  //     } else {
+  //       // В случае ошибки, обрабатываем её здесь
+  //       console.error('Ошибка при запросе:', response.status);
+  //     }
+  //   });
+  // })
+  // .catch(error => {
+  //   console.error('Произошла ошибка при выполнении запросов:', error);
+  // });
 });
 
 
@@ -85,14 +104,14 @@ const newsSlice = createSlice({
       .addCase(fetchNew.rejected, () => {
         // state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchComment.pending, () => {
+      .addCase(fetchComments.pending, () => {
         // state.newsListLoadingStatus = 'loading';
       })
-      .addCase(fetchComment.fulfilled, (state, action: PayloadAction<IComment>) => {
+      .addCase(fetchComments.fulfilled, (state, action: PayloadAction<IComment>) => {
         // state.newsListLoadingStatus = 'not loading';
         state.comments.push(action.payload);
       })
-      .addCase(fetchComment.rejected, () => {
+      .addCase(fetchComments.rejected, () => {
         // state.newsListLoadingStatus = 'error';
       })
       .addDefaultCase(() => { });

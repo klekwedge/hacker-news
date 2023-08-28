@@ -5,8 +5,8 @@ import { Avatar, Flex, Box, Heading, Link, List, ListItem, Button } from '@chakr
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 import { GrUpdate } from 'react-icons/gr';
-import { useAppDispatch, useAppSelector } from '../hooks/app.hook';
-import { fetchComment, fetchNew, resetComments } from '../slices/newsSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { fetchComments, fetchNew, resetComments } from '../slices/newsSlice';
 import Comment from '../components/Comment/Comment';
 
 function NewsPage() {
@@ -21,9 +21,21 @@ function NewsPage() {
 
   useEffect(() => {
     if (currentNews) {
-      currentNews.kids.forEach((commentId) => {
-        dispatch(fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`));
+      const urls = currentNews.kids.map(
+        (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
+      );
+
+      const fetchPromises: Promise<Response>[] = [];
+
+      urls.forEach((url) => {
+        fetchPromises.push(fetch(url));
       });
+
+      // dispatch(fetchComments(fetchPromises))
+
+      // currentNews.kids.forEach((commentId) => {
+      //   dispatch(fetchComment(`https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`));
+      // });
     }
   }, [currentNews]);
 
@@ -38,11 +50,13 @@ function NewsPage() {
 
   return (
     <Box maxW="1200px" m="0 auto" p="20px" gap="20px">
-      <Flex gap="20px" alignItems="center" mb="30px" justifyContent='space-between'>
-        <RouterLink to="/" style={{ display: 'flex', alignItems: 'center', gap: "5px" }}>
+      <Flex gap="20px" alignItems="center" mb="30px" justifyContent="space-between">
+        <RouterLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           <BsFillArrowLeftSquareFill size="30px" /> Back to the main
         </RouterLink>
-        <Button colorScheme='blue' onClick={() => updateComments()} >Update</Button>
+        <Button colorScheme="blue" onClick={() => updateComments()}>
+          Update
+        </Button>
       </Flex>
       {currentNews ? (
         <>
@@ -67,7 +81,7 @@ function NewsPage() {
           {/* список комментариев в виде дерева */}
           <List display="flex" flexDirection="column" gap="30px" p="20px 10px">
             {comments.map((commentItem) => (
-              <Comment commentItem={commentItem}/>
+              <Comment commentItem={commentItem} key={commentItem.id} />
             ))}
           </List>
         </>
