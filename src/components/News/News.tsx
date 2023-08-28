@@ -60,7 +60,7 @@ function News({ currentNews }: NewsProps) {
 
   return (
     <>
-      <Flex justifyContent="space-between" mb="30px">
+      <Flex justifyContent="space-between" mb="30px" flexWrap='wrap' gap='20px'>
         <Box>
           <Heading as="h1" fontWeight="700" fontSize="24px" mb="10px">
             {currentNews.title}

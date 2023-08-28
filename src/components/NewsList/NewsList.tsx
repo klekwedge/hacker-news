@@ -11,6 +11,10 @@ function NewsList() {
   const navigate = useNavigate();
   const { newsList, newsLinks, newsListLoadingStatus } = useAppSelector((state) => state.news);
 
+  const newOnClick = (id: number) => {
+    navigate(`/${id}`);
+  };
+
   useEffect(() => {
     dispatch(
       fetchNewsLinks(
@@ -18,10 +22,6 @@ function NewsList() {
       ),
     );
   }, []);
-
-  const newOnClick = (id: number) => {
-    navigate(`/${id}`);
-  };
 
   useEffect(() => {
     if (newsLinks.length) {
@@ -34,6 +34,17 @@ function NewsList() {
       dispatch(fetchNews(fetchPromises));
     }
   }, [newsLinks]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(
+        fetchNewsLinks(
+          'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="$key"&limitToFirst=100',
+        ),
+      );
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (newsListLoadingStatus === 'loading') {
     return <Spinner />;
