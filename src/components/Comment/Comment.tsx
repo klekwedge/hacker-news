@@ -1,6 +1,15 @@
 /* eslint-disable react/self-closing-comp */
 import { useState } from 'react';
-import { Avatar, Flex, Heading, Accordion, AccordionItem, AccordionButton, AccordionPanel, Spinner } from '@chakra-ui/react';
+import {
+  Avatar,
+  Flex,
+  Heading,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  Spinner,
+} from '@chakra-ui/react';
 import { IComment } from '../../types';
 import { useAllFetch } from '../../hooks/useFetch';
 
@@ -75,15 +84,17 @@ function Comment({ commentItem }: CommentProps) {
                   >
                     {isExpanded ? 'Close comments' : 'Open comments'}
                   </AccordionButton>
-                  <AccordionPanel p="0">
-                    {isCommentsLoading ? (
-                      <Flex justifyContent="center">
-                        <Spinner size="xl" />
-                      </Flex>
-                    ) : (
-                      comments.map((comment) => <Comment commentItem={comment} key={comment.id} />)
-                    )}
-                  </AccordionPanel>
+                  {isCommentsLoading ? (
+                    <Flex justifyContent="center">
+                      <Spinner size="xl" />
+                    </Flex>
+                  ) : (
+                    <AccordionPanel p="0">
+                      {comments.map((comment) => (
+                        <Comment commentItem={comment} key={comment.id} />
+                      ))}
+                    </AccordionPanel>
+                  )}
                 </>
               )}
             </AccordionItem>
