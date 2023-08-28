@@ -82,15 +82,15 @@ const newsSlice = createSlice({
       .addCase(fetchNew.rejected, (state) => {
         state.currentNewsLoadingStatus = 'error';
       })
-      .addCase(fetchComments.pending, () => {
-        // state.newsListLoadingStatus = 'loading';
+      .addCase(fetchComments.pending, (state) => {
+        state.commentsLoadingStatus = 'loading';
       })
       .addCase(fetchComments.fulfilled, (state, action: any) => {
-        // state.newsListLoadingStatus = 'not loading';
+        state.commentsLoadingStatus = 'idle';
         state.comments = action.payload;
       })
-      .addCase(fetchComments.rejected, () => {
-        // state.newsListLoadingStatus = 'error';
+      .addCase(fetchComments.rejected, (state) => {
+        state.commentsLoadingStatus = 'error';
       })
   },
 });

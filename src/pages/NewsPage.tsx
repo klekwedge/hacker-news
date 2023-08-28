@@ -7,11 +7,14 @@ import { GrUpdate } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { fetchComments, fetchNew, resetComments } from '../slices/newsSlice';
 import Comment from '../components/Comment/Comment';
+import Spinner from '../components/Spinner/Spinner';
 
 function NewsPage() {
   const { newsId } = useParams();
   const dispatch = useAppDispatch();
-  const { currentNews, comments, currentNewsLoadingStatus } = useAppSelector((state) => state.news);
+  const { currentNews, comments, currentNewsLoadingStatus, commentsLoadingStatus } = useAppSelector(
+    (state) => state.news,
+  );
 
   useEffect(() => {
     dispatch(resetComments());
@@ -49,6 +52,10 @@ function NewsPage() {
 
       dispatch(fetchComments(fetchPromises));
     }
+  }
+
+  if (currentNewsLoadingStatus === 'loading' || commentsLoadingStatus === 'loading') {
+    return <Spinner />;
   }
 
   return (
