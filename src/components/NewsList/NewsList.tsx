@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Heading, Flex } from '@chakra-ui/react';
+import { Box, Heading, Flex, Button } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchNews, fetchNewsLinks } from '../../slices/newsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
@@ -15,13 +15,28 @@ function NewsList() {
     navigate(`/${id}`);
   };
 
-  useEffect(() => {
+  const getNewLinks = () => {
     dispatch(
       fetchNewsLinks(
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="$key"&limitToFirst=100',
       ),
     );
+  }
+
+  useEffect(() => {
+    getNewLinks()
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getNewLinks();
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateNews = () => {
+    getNewLinks();
+  }
 
   useEffect(() => {
     if (newsLinks.length) {
@@ -35,23 +50,13 @@ function NewsList() {
     }
   }, [newsLinks]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(
-        fetchNewsLinks(
-          'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="$key"&limitToFirst=100',
-        ),
-      );
-    }, 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   if (newsListLoadingStatus === 'loading') {
     return <Spinner />;
   }
 
   return (
     <Box maxW="1200px" m="0 auto" p="20px">
+      <Button onClick={updateNews} colorScheme='teal' mb='20px'>Update news</Button>
       {newsList.length > 0 && newsListLoadingStatus === 'idle' ? (
         <Flex flexDirection="column" gap="20px">
           {newsList.map((newsItem, index) => (
