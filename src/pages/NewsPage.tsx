@@ -55,7 +55,7 @@ function NewsPage() {
     <Box maxW="1200px" m="0 auto" p="20px" gap="20px">
       <Flex gap="20px" alignItems="center" mb="30px" justifyContent="space-between">
         <RouterLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <BsFillArrowLeftSquareFill size="30px" /> Back to the main
+          <BsFillArrowLeftSquareFill size={30} /> Back to the main
         </RouterLink>
         <Button colorScheme="blue" onClick={() => updateComments()}>
           Update

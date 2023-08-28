@@ -5,7 +5,7 @@ import { useAllFetch, useFetch } from '../hooks/useFetch';
 import { IComment, INew, NewsListState } from './newsSlice.types';
 
 const initialState: NewsListState = {
-  newsRefs: [],
+  newsLinks: [],
   newsList: [],
   newsListLoadingStatus: 'not loading',
   currentNews: null,
@@ -13,14 +13,14 @@ const initialState: NewsListState = {
   commentsLoadingStatus: 'not loading'
 };
 
-export const fetchNews = createAsyncThunk('news/fetchNews', (url: string) => {
+export const fetchNewsLinks = createAsyncThunk('news/fetchNewsLinks', (url: string) => {
   const { request } = useFetch();
   return request(url);
 });
 
-export const fetchSingleNew = createAsyncThunk('news/fetchSingleNew', (url: string) => {
-  const { request } = useFetch();
-  return request(url);
+export const fetchNews = createAsyncThunk('news/fetchNews', (fetchPromises: Promise<Response>[]) => {
+  const { request } = useAllFetch();
+  return request(fetchPromises);
 });
 
 export const fetchNew = createAsyncThunk('news/fetchNew', (url: string) => {
@@ -50,29 +50,24 @@ const newsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchNewsLinks.pending, (state) => {
+        state.newsListLoadingStatus = 'loading';
+      })
+      .addCase(fetchNewsLinks.fulfilled, (state, action) => {
+        state.newsListLoadingStatus = 'not loading';
+        state.newsLinks = action.payload;
+      })
+      .addCase(fetchNewsLinks.rejected, (state) => {
+        state.newsListLoadingStatus = 'error';
+      })
       .addCase(fetchNews.pending, (state) => {
         state.newsListLoadingStatus = 'loading';
       })
-      .addCase(fetchNews.fulfilled, (state, action) => {
+      .addCase(fetchNews.fulfilled, (state, action: any) => {
+        state.newsList = action.payload
         state.newsListLoadingStatus = 'not loading';
-        state.newsRefs = action.payload;
       })
       .addCase(fetchNews.rejected, (state) => {
-        state.newsListLoadingStatus = 'error';
-      })
-      .addCase(fetchSingleNew.pending, (state) => {
-        state.newsListLoadingStatus = 'loading';
-      })
-      .addCase(fetchSingleNew.fulfilled, (state, action: PayloadAction<INew>) => {
-        state.newsList.push(action.payload);
-        if (state.newsList.length === 100) {
-          state.newsListLoadingStatus = 'not loading';
-        }
-        else {
-          state.newsListLoadingStatus = 'loading';
-        }
-      })
-      .addCase(fetchSingleNew.rejected, (state) => {
         state.newsListLoadingStatus = 'error';
       })
       .addCase(fetchNew.pending, () => {

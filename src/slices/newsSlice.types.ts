@@ -1,5 +1,5 @@
 export type NewsListState = {
-  newsRefs: string[],
+  newsLinks: string[],
   newsList: INew[],
   newsListLoadingStatus: LoadingStatus
   currentNews: null | INew,

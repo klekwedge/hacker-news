@@ -1,24 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Box, List, ListItem, Heading } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
-import { fetchNews, fetchSingleNew } from '../../slices/newsSlice';
+import { fetchNews, fetchNewsLinks } from '../../slices/newsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import Spinner from '../Spinner/Spinner';
 
 function NewsList() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { newsList, newsRefs, newsListLoadingStatus } = useAppSelector((state) => state.news);
+  const { newsList, newsLinks, newsListLoadingStatus } = useAppSelector((state) => state.news);
 
   useEffect(() => {
-    if (newsList.length === 0) {
-      dispatch(
-        fetchNews(
-          'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty &orderBy="$key"&limitToFirst=100',
-        ),
-      );
-    }
+    dispatch(
+      fetchNewsLinks(
+        'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="$key"&limitToFirst=100',
+      ),
+    );
   }, []);
 
   const newOnClick = (id: number) => {
@@ -26,13 +24,18 @@ function NewsList() {
   };
 
   useEffect(() => {
-    if (newsRefs.length > 0 && newsList.length < 100) {
-      // eslint-disable-next-line array-callback-return
-      newsRefs.map((newsId) => {
-        dispatch(fetchSingleNew(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`));
+    if (newsLinks.length) {
+      const urls = newsLinks.map(
+        (newsId) => `https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`,
+      );
+
+      const fetchPromises: Promise<Response>[] = [];
+      urls.forEach((url) => {
+        fetchPromises.push(fetch(url));
       });
+      dispatch(fetchNews(fetchPromises));
     }
-  }, [newsRefs]);
+  }, [newsLinks]);
 
   if (newsListLoadingStatus === 'loading') {
     return (
