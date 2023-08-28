@@ -14,7 +14,7 @@ function News({ currentNews }: NewsProps) {
   const [comments, setComments] = useState<IComment[]>([]);
   const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
-  useEffect(() => {
+  const getComments = () => {
     if (currentNews && currentNews.kids) {
       setIsCommentsLoading(true);
       const urls = currentNews.kids.map(
@@ -34,33 +34,19 @@ function News({ currentNews }: NewsProps) {
         setIsCommentsLoading(false);
       });
     }
+  };
+
+  useEffect(() => {
+    getComments();
   }, [currentNews]);
 
   function updateComments() {
-    setIsCommentsLoading(true);
-    if (currentNews && currentNews.kids) {
-      const urls = currentNews.kids.map(
-        (commentId) => `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`,
-      );
-
-      const fetchPromises: Promise<Response>[] = [];
-
-      urls.forEach((url) => {
-        fetchPromises.push(fetch(url));
-      });
-
-      const { request } = useAllFetch();
-
-      request(fetchPromises).then((data) => {
-        setComments(data as IComment[]);
-        setIsCommentsLoading(false);
-      });
-    }
+    getComments();
   }
 
   return (
     <>
-      <Flex justifyContent="space-between" mb="30px" flexWrap='wrap' gap='20px'>
+      <Flex justifyContent="space-between" mb="30px" flexWrap="wrap" gap="20px">
         <Box>
           <Heading as="h1" fontWeight="700" fontSize="24px" mb="10px">
             {currentNews.title}
@@ -82,11 +68,11 @@ function News({ currentNews }: NewsProps) {
           </Heading>
         </Box>
         <Button colorScheme="blue" onClick={() => updateComments()}>
-          Update
+          Update comments
         </Button>
       </Flex>
       {isCommentsLoading ? (
-        <Flex justifyContent='center'>
+        <Flex justifyContent="center">
           <Spinner size="xl" />
         </Flex>
       ) : (
