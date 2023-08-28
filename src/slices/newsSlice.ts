@@ -60,8 +60,8 @@ const newsSlice = createSlice({
       .addCase(fetchNews.rejected, (state) => {
         state.newsListLoadingStatus = 'error';
       })
-      .addCase(fetchSingleNew.pending, () => {
-        // state.newsListLoadingStatus = 'loading';
+      .addCase(fetchSingleNew.pending, (state) => {
+        state.newsListLoadingStatus = 'loading';
       })
       .addCase(fetchSingleNew.fulfilled, (state, action: PayloadAction<INew>) => {
         state.newsList.push(action.payload);
@@ -88,14 +88,13 @@ const newsSlice = createSlice({
       .addCase(fetchComments.pending, () => {
         // state.newsListLoadingStatus = 'loading';
       })
-      .addCase(fetchComments.fulfilled, (state, action: PayloadAction<IComment>) => {
+      .addCase(fetchComments.fulfilled, (state, action: any) => {
         // state.newsListLoadingStatus = 'not loading';
         state.comments = action.payload;
       })
       .addCase(fetchComments.rejected, () => {
         // state.newsListLoadingStatus = 'error';
       })
-      .addDefaultCase(() => { });
   },
 });
 
