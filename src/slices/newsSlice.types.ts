@@ -1,4 +1,4 @@
-import { IComment, INews, LoadingStatus } from "../types";
+import { INews, LoadingStatus } from "../types";
 
 export type NewsListState = {
   newsLinks: string[],
@@ -6,6 +6,5 @@ export type NewsListState = {
   newsListLoadingStatus: LoadingStatus
   currentNews: null | INews,
   currentNewsLoadingStatus: LoadingStatus,
-  comments: IComment[],
-  commentsLoadingStatus: LoadingStatus
+
 };

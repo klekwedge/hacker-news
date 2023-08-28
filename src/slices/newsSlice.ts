@@ -11,8 +11,6 @@ const initialState: NewsListState = {
   newsListLoadingStatus: 'loading',
   currentNews: null,
   currentNewsLoadingStatus: 'loading',
-  comments: [],
-  commentsLoadingStatus: 'loading',
 };
 
 export const fetchNewsLinks = createAsyncThunk('news/fetchNewsLinks', (url: string) => {
@@ -76,6 +74,5 @@ const newsSlice = createSlice({
   },
 });
 
-const { actions, reducer } = newsSlice;
-// export const { } = actions;
+const { reducer } = newsSlice;
 export default reducer;
