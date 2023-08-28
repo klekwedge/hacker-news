@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Box, List, ListItem, Heading } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Heading, Flex } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchNews, fetchNewsLinks } from '../../slices/newsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
@@ -42,9 +42,9 @@ function NewsList() {
   return (
     <Box maxW="1200px" m="0 auto" p="20px">
       {newsList.length > 0 && newsListLoadingStatus === 'idle' ? (
-        <List display="flex" flexDirection="column" gap="20px">
+        <Flex flexDirection="column" gap="20px">
           {newsList.map((newsItem, index) => (
-            <ListItem
+            <Box
               onClick={() => newOnClick(newsItem.id)}
               key={uuidv4()}
               background="blue.500"
@@ -67,9 +67,9 @@ function NewsList() {
               <Heading as="h3" fontWeight="400" fontSize="16px" mb="2px">{`Time: ${new Date(
                 newsItem.time * 1000,
               ).toLocaleString()}`}</Heading>
-            </ListItem>
+            </Box>
           ))}
-        </List>
+        </Flex>
       ) : null}
     </Box>
   );

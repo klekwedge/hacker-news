@@ -1,6 +1,6 @@
 /* eslint-disable react/self-closing-comp */
 import { useState } from 'react';
-import { Avatar, Flex, Heading, Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react';
+import { Avatar, Flex, Heading, Accordion, AccordionItem, AccordionButton, AccordionPanel, Spinner } from '@chakra-ui/react';
 import { IComment } from '../../types';
 import { useAllFetch } from '../../hooks/useFetch';
 
@@ -40,10 +40,10 @@ function Comment({ commentItem }: CommentProps) {
       <Avatar name={commentItem.by} />
       <Flex flexDirection="column">
         <Flex gap="20px" alignItems="center" mb="10px">
-          <Heading as="h2" fontWeight="400" fontSize="16px" mb="2px">
+          <Heading as="h2" fontWeight="500" fontSize="20px" mb="2px">
             {commentItem.by}
           </Heading>
-          <Heading as="h2" fontWeight="400" fontSize="16px" mb="2px">
+          <Heading as="h2" fontWeight="400" fontSize="14px" color="gray.500" mb="2px">
             {`${new Date(commentItem.time * 1000).toLocaleString()}`}
           </Heading>
         </Flex>
@@ -75,9 +75,11 @@ function Comment({ commentItem }: CommentProps) {
                   >
                     {isExpanded ? 'Close comments' : 'Open comments'}
                   </AccordionButton>
-                  <AccordionPanel>
+                  <AccordionPanel p="0">
                     {isCommentsLoading ? (
-                      <h3>Loading...</h3>
+                      <Flex justifyContent="center">
+                        <Spinner size="xl" />
+                      </Flex>
                     ) : (
                       comments.map((comment) => <Comment commentItem={comment} key={comment.id} />)
                     )}
