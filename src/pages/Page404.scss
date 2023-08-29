@@ -1,0 +1,43 @@
+.error-page {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(70deg, #0067ff 0%, #06e4ff 100%);
+  }
+  
+  .error-page__block {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  .error-page__block h1 {
+    color: white;
+    font-size: 50px;
+    padding-right: 12px;
+    animation: type 0.5s alternate infinite;
+  }
+  
+  .error-page h2 {
+    color: white;
+    font-size: 25px;
+  }
+  
+  .error-page a {
+    color: white;
+    transition: all 0.5s ease;
+    font-size: 25px;
+    text-decoration: underline ;
+  }
+  
+  @keyframes type {
+    from {
+      box-shadow: inset -3px 0px 0px white;
+    }
+    to {
+      box-shadow: inset -3px 0px 0px transparent;
+    }
+  }
