@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import Spinner from './Spinner';
 
-describe('Spinner компонент', () => {
+describe('Spinner component', () => {
   it('должен рендериться без ошибок', () => {
     const { container } = render(<Spinner />);
     expect(container).toBeInTheDocument();

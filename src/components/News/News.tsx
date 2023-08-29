@@ -1,4 +1,3 @@
-/* eslint-disable react/self-closing-comp */
 import { useEffect, useState } from 'react';
 import { Box, Button, Flex, Heading, Link, Spinner } from '@chakra-ui/react';
 
